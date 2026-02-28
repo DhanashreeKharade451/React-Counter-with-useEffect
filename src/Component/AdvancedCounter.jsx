@@ -48,8 +48,8 @@ useEffect(() => {
 
     return () => {
         document.removeEventListener("keydown", handleKeyDown)
-    }; [step]
-});
+    }; 
+}, [step]);
 
     //function to increment and decreament counter
 
