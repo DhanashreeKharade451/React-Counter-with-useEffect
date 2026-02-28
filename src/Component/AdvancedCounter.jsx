@@ -7,6 +7,17 @@ import { useState ,useEffect } from "react";
     const[step, setStep] = useState(1)
     const [saved,setSaved] = useState(false)
 
+    //Load from Local Storage on mount
+    useEffect(() => {
+        const SavedCount = localStorage.getItem("advanced-count");
+        if (SavedCount !== null){
+            const parsed = Number(SavedCount);
+            setCount(parsed);
+            setHistory([parsed]);
+
+        }
+    },[]);
+
     //Autosave to local Storage
     useEffect(() => {
   setSaved(false)
@@ -14,11 +25,31 @@ import { useState ,useEffect } from "react";
   const timer = setTimeout(() => {
     localStorage.setItem("advanced-count", count)
     setSaved(true)
-  }, 500)
+  }, 500);
 
   return () => clearTimeout(timer)
 
 }, [count])
+
+
+//keyBoard Event
+
+useEffect(() => {
+    const handleKeyDown = (e) =>{
+        if (e.key === "ArrowUp"){
+            setCount(prev => prev + step)
+        }
+
+        if (e.key === "ArrowDown"){
+            setCount(prev => prev - step)
+        }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+        document.removeEventListener("keydown", handleKeyDown)
+    }; [step]
+});
 
     //function to increment and decreament counter
 
