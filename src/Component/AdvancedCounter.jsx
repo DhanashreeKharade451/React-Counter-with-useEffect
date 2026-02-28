@@ -7,15 +7,30 @@ import { useState } from "react";
     const[step, setStep] = useState(1)
     const [saved,setSaved] = useState(false)
 
+    //
+
     //function to increment and decreament counter
 
     function handleIncrement() {
          setCount( prevcount => prevcount + 1);
+         
+        
     }
 
     function handleDecrement(){
         setCount( prevcount => prevcount - 1);
     }
+
+    function reset(){
+        setCount(0);
+        setHistory([0]);
+
+    }
+
+    // Track history when count changes
+//   useEffect(() => {
+//     setHistory(prev => [...prev, count]);
+//   }, [count]);
 
 
   return (
@@ -26,7 +41,7 @@ import { useState } from "react";
       </h2>
 
       <div className="text-2xl text-center my-5">
-        Current Count: <span className="font-bold">0</span>
+        Current Count: <span className="font-bold">{count}</span>
       </div>
 
       <div className="flex justify-center gap-3 mb-5">
@@ -38,7 +53,7 @@ import { useState } from "react";
           Increment
         </button>
 
-        <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+        <button onClick={reset} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
           Reset
         </button>
       </div>
@@ -51,6 +66,8 @@ import { useState } from "react";
           type="number"
           id="stepInput"
           min="1"
+          value={step}
+          onChange={(e) => setStep(Number(e.target.value))}
           className="px-2 py-1 w-16 border rounded"
           defaultValue="1"
         />
