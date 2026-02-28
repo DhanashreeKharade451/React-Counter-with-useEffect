@@ -6,7 +6,7 @@ function AdvancedCounter() {
   const [step, setStep] = useState(1);
   const [saved, setSaved] = useState(false);
 
-  const saveTimeoutRef = useRef(null);
+  //const saveTimeoutRef = useRef(null);
 
   //Load from Local Storage 
   useEffect(() => {
@@ -23,21 +23,20 @@ function AdvancedCounter() {
 
   //-----------------------Autosave to local Storage------------------------------------
   
-   useEffect(() => {
-    setSaved(false);
+  localStorage.setItem("advanced-count", JSON.stringify(count));
+      useEffect(() => {
+    setSaved(false)
 
-    saveTimeoutRef.current = setTimeout(() => {
-      localStorage.setItem("advanced-count", count.toString());
-      setSaved(true);
+    const timer = setTimeout(() => {
+      localStorage.setItem("advanced-count", count.toString())
+      setSaved(true)
     }, 500);
 
-    // Cleanup prevents race conditions
-    return () => {
-      clearTimeout(saveTimeoutRef.current);
-    };
+    return () => clearTimeout(timer)
+
   }, [count]);
 
-  //--------------------keyBoard Event-------------
+  //keyBoard Event
 
   useEffect(() => {
     const handleKeyDown = (e) => {
