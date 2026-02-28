@@ -1,24 +1,35 @@
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 
  function AdvancedCounter() {
 
     const[count, setCount] = useState(0)
-    const[history, setHistory] =useState([0]) 
+    const[history, setHistory] =useState([]) 
     const[step, setStep] = useState(1)
     const [saved,setSaved] = useState(false)
 
-    //
+    //Autosave to local Storage
+    useEffect(() => {
+  setSaved(false)
+
+  const timer = setTimeout(() => {
+    localStorage.setItem("advanced-count", count)
+    setSaved(true)
+  }, 500)
+
+  return () => clearTimeout(timer)
+
+}, [count])
 
     //function to increment and decreament counter
 
     function handleIncrement() {
-         setCount( prevcount => prevcount + 1);
+         setCount( prevcount => prevcount + step);
          
         
     }
 
     function handleDecrement(){
-        setCount( prevcount => prevcount - 1);
+        setCount( prevcount => prevcount - step);
     }
 
     function reset(){
@@ -27,10 +38,13 @@ import { useState } from "react";
 
     }
 
-    // Track history when count changes
-//   useEffect(() => {
-//     setHistory(prev => [...prev, count]);
-//   }, [count]);
+    //Track history when count changes
+  useEffect(() => {
+    setHistory(prev => {
+        if(prev[prev.length - 1] === count) return prev; //avoid duplicate
+        return [...prev, count]
+    });
+  }, [count]);
 
 
   return (
@@ -59,7 +73,7 @@ import { useState } from "react";
       </div>
 
       <div className="mb-5 text-center">
-        <label htmlFor="stepInput" className="mr-2">
+        <label htmlFor="stepInput"  className="mr-2">
           Step Value:
         </label>
         <input
@@ -69,7 +83,7 @@ import { useState } from "react";
           value={step}
           onChange={(e) => setStep(Number(e.target.value))}
           className="px-2 py-1 w-16 border rounded"
-          defaultValue="1"
+         
         />
       </div>
 
@@ -83,7 +97,12 @@ import { useState } from "react";
         </h3>
 
         <ul className="max-h-40 overflow-y-auto">
-          <li className="py-1">0</li>
+
+        {history.map((item,index) =>
+            ( <li key={index} className="py-1">
+            {item}
+          </li>))}
+          
         </ul>
       </div>
 
@@ -92,7 +111,6 @@ import { useState } from "react";
       </small>
 
       
-
     </div>
   );
 }
