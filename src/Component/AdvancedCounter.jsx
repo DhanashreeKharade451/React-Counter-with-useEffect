@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function AdvancedCounter() {
   const [count, setCount] = useState(0);
@@ -6,7 +6,7 @@ function AdvancedCounter() {
   const [step, setStep] = useState(1);
   const [saved, setSaved] = useState(false);
 
-  //const saveTimeoutRef = useRef(null);
+  const saveTimeoutRef = useRef(null);
 
   //Load from Local Storage 
   useEffect(() => {
@@ -23,6 +23,7 @@ function AdvancedCounter() {
 
   //-----------------------Autosave to local Storage------------------------------------
   
+
   localStorage.setItem("advanced-count", JSON.stringify(count));
       useEffect(() => {
     setSaved(false)
@@ -36,7 +37,7 @@ function AdvancedCounter() {
 
   }, [count]);
 
-  //keyBoard Event
+  //-------------------keyBoard Event+----------
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -55,7 +56,7 @@ function AdvancedCounter() {
     };
   }, [step]);
 
-  //function to increment and decreament counter
+  //-------function to increment and decreament counter
 
   function handleIncrement() {
     setCount((prevcount) => prevcount + step);
@@ -64,20 +65,21 @@ function AdvancedCounter() {
   function handleDecrement() {
     setCount((prevcount) => prevcount - step);
   }
-
+//-------------Reset------------
   function reset() {
     setCount(0);
     setHistory([0]);
-    localStorage.removeItem("advanced-count");
+ //   localStorage.removeItem("advanced-count");
   }
 
-  //Track history when count changes
+  //--------Track history when count changes----------
   useEffect(() => {
     setHistory((prev) => {
       if (prev[prev.length - 1] === count) return prev; //avoid duplicate
       return [...prev, count];
     });
   }, [count]);
+  //----------------UI--------------
 
   return (
     <div className="font-sans max-w-md mx-auto p-5 border border-gray-300 rounded-lg mt-5 mb-5">
