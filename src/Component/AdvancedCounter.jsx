@@ -36,7 +36,6 @@ function AdvancedCounter() {
     return () => clearTimeout(timer)
 
   }, [count]);
-
   //-------------------keyBoard Event+----------
 
   useEffect(() => {
